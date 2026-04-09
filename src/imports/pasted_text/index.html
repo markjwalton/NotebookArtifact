@@ -1,0 +1,1969 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TradeAI by Sturij — Built for Independent Joiners</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --sage: #4a5d4e;
+        --sage-l: #6b9970;
+        --sage-pale: #1a241b;
+        --gold: #d4a574;
+        --gold-d: #8a6644;
+        --white: #f0ede6;
+        --white-d: #9fa89f;
+        --bg: #111614;
+        --bg2: #171d18;
+        --bg3: #1e2620;
+        --border: #2a352b;
+        --coral: #e07555;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--white);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(17, 22, 20, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        height: 60px;
+      }
+      .nav-logo {
+        font-family: "DM Serif Display", serif;
+        font-size: 22px;
+        color: var(--white);
+      }
+      .nav-logo span {
+        color: var(--gold);
+        font-style: italic;
+      }
+      .nav-links {
+        display: flex;
+        gap: 32px;
+      }
+      .nav-links a {
+        color: var(--white-d);
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .nav-links a:hover {
+        color: var(--white);
+      }
+      .nav-cta {
+        background: var(--sage);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        transition: background 0.15s;
+      }
+      .nav-cta:hover {
+        background: var(--sage-l);
+      }
+
+      /* ── SECTIONS ── */
+      section {
+        padding: 100px 40px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .full-width {
+        max-width: none;
+        padding: 100px 0;
+      }
+      .full-width > * {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+
+      /* ── HERO ── */
+      #hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 80px;
+        padding-bottom: 60px;
+        max-width: none;
+        background: radial-gradient(
+          ellipse at 60% 40%,
+          rgba(74, 93, 78, 0.15) 0%,
+          transparent 60%
+        );
+      }
+      #hero > * {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 40px;
+        width: 100%;
+      }
+
+      .hero-eyebrow {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 24px;
+      }
+      .hero-h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(42px, 6vw, 80px);
+        line-height: 1.05;
+        color: var(--white);
+        margin-bottom: 28px;
+      }
+      .hero-h1 em {
+        color: var(--gold);
+        font-style: italic;
+      }
+      .hero-sub {
+        font-size: 20px;
+        color: var(--white-d);
+        max-width: 640px;
+        margin-bottom: 48px;
+        line-height: 1.6;
+      }
+      .hero-ctas {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 64px;
+      }
+      .btn-primary {
+        background: var(--sage);
+        color: white;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        transition: all 0.15s;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        background: var(--sage-l);
+        transform: translateY(-1px);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--white);
+        border: 1px solid var(--border);
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        transition: all 0.15s;
+        display: inline-block;
+      }
+      .btn-ghost:hover {
+        border-color: var(--sage-l);
+        color: var(--sage-l);
+      }
+
+      .trust-bar {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        flex-wrap: wrap;
+        padding-top: 32px;
+        border-top: 1px solid var(--border);
+      }
+      .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .trust-score {
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--white);
+      }
+      .trust-label {
+        font-size: 12px;
+        color: var(--white-d);
+        line-height: 1.3;
+      }
+      .trust-stars {
+        color: var(--gold);
+        font-size: 16px;
+        letter-spacing: 2px;
+      }
+      .trust-sep {
+        width: 1px;
+        height: 40px;
+        background: var(--border);
+      }
+
+      /* ── THE PROBLEM ── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: start;
+      }
+      @media (max-width: 700px) {
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .section-eyebrow {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 16px;
+      }
+      .section-h2 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(28px, 4vw, 44px);
+        color: var(--white);
+        line-height: 1.15;
+        margin-bottom: 20px;
+      }
+      .section-h2 em {
+        color: var(--gold);
+        font-style: italic;
+      }
+      .body-text {
+        color: var(--white-d);
+        font-size: 16px;
+        line-height: 1.7;
+        margin-bottom: 16px;
+      }
+
+      .problem-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+      }
+      .problem-card h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--coral);
+        margin-bottom: 12px;
+      }
+      .problem-list {
+        list-style: none;
+      }
+      .problem-list li {
+        color: var(--white-d);
+        font-size: 14px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 10px;
+      }
+      .problem-list li::before {
+        content: "✕";
+        color: var(--coral);
+        flex-shrink: 0;
+      }
+      .problem-list li:last-child {
+        border-bottom: none;
+      }
+
+      /* ── HOW IT WORKS ── */
+      #how {
+        background: var(--bg2);
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      @media (max-width: 700px) {
+        .steps {
+          grid-template-columns: 1fr;
+        }
+      }
+      .step-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+        border-top: 3px solid var(--sage);
+      }
+      .step-n {
+        font-size: 42px;
+        font-weight: 700;
+        color: rgba(74, 93, 78, 0.3);
+        line-height: 1;
+        margin-bottom: 16px;
+      }
+      .step-card h3 {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 10px;
+      }
+      .step-card p {
+        font-size: 14px;
+        color: var(--white-d);
+        line-height: 1.6;
+      }
+
+      /* ── ECONOMICS ── */
+      .econ-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 32px;
+      }
+      .econ-table th {
+        background: var(--bg3);
+        color: var(--white-d);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      .econ-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        color: var(--white-d);
+      }
+      .econ-table tr:last-child td {
+        border-bottom: none;
+      }
+      .econ-table td:first-child {
+        color: var(--white);
+        font-weight: 500;
+      }
+      .econ-table td.highlight {
+        color: var(--gold);
+        font-weight: 600;
+      }
+      .econ-table td.good {
+        color: #72b87a;
+        font-weight: 600;
+      }
+
+      /* ── QUOTE BLOCK ── */
+      .pull-quote {
+        border-left: 4px solid var(--gold);
+        padding: 24px 32px;
+        margin: 40px 0;
+        background: var(--bg3);
+        border-radius: 0 12px 12px 0;
+      }
+      .pull-quote p {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(18px, 2.5vw, 26px);
+        color: var(--white);
+        line-height: 1.4;
+        font-style: italic;
+      }
+
+      /* ── FEATURES GRID ── */
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .feature-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 24px;
+      }
+      .feature-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--sage-pale);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        margin-bottom: 14px;
+        border: 1px solid var(--border);
+      }
+      .feature-card h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 8px;
+      }
+      .feature-card p {
+        font-size: 13px;
+        color: var(--white-d);
+        line-height: 1.5;
+      }
+
+      /* ── SOCIAL PROOF ── */
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+      }
+      .review-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+      }
+      .review-stars {
+        color: var(--gold);
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      .review-text {
+        font-size: 14px;
+        color: var(--white-d);
+        line-height: 1.6;
+        margin-bottom: 12px;
+        font-style: italic;
+      }
+      .review-author {
+        font-size: 12px;
+        color: var(--white);
+        font-weight: 500;
+      }
+      .review-source {
+        font-size: 11px;
+        color: var(--white-d);
+      }
+
+      /* ── FOUNDER ── */
+      .founder-block {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 48px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 48px;
+        align-items: start;
+      }
+      @media (max-width: 700px) {
+        .founder-block {
+          grid-template-columns: 1fr;
+        }
+      }
+      .founder-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .founder-stat .num {
+        font-family: "DM Serif Display", serif;
+        font-size: 40px;
+        color: var(--gold);
+        line-height: 1;
+      }
+      .founder-stat .label {
+        font-size: 13px;
+        color: var(--white-d);
+        margin-top: 4px;
+      }
+      .founder-creds {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .cred-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 14px;
+        color: var(--white-d);
+      }
+      .cred-item::before {
+        content: "→";
+        color: var(--gold);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      /* ── REGISTER FORM ── */
+      #register {
+        background: linear-gradient(
+          135deg,
+          rgba(74, 93, 78, 0.15) 0%,
+          transparent 50%
+        );
+        border-top: 1px solid var(--border);
+      }
+      .form-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 48px;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .form-title {
+        font-family: "DM Serif Display", serif;
+        font-size: 32px;
+        color: var(--white);
+        margin-bottom: 8px;
+      }
+      .form-sub {
+        font-size: 15px;
+        color: var(--white-d);
+        margin-bottom: 36px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--white-d);
+        margin-bottom: 7px;
+        letter-spacing: 0.3px;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: 14px;
+        color: var(--white);
+        font-family: inherit;
+        transition: border-color 0.15s;
+        outline: none;
+      }
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--sage-l);
+      }
+      .form-group select option {
+        background: var(--bg3);
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 500px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .form-submit {
+        width: 100%;
+        background: var(--sage);
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        margin-top: 8px;
+        transition: background 0.15s;
+      }
+      .form-submit:hover {
+        background: var(--sage-l);
+      }
+      .form-note {
+        font-size: 12px;
+        color: var(--white-d);
+        text-align: center;
+        margin-top: 14px;
+      }
+      .form-success {
+        display: none;
+        text-align: center;
+        padding: 24px;
+        color: #72b87a;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+        padding: 32px 40px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--white-d);
+      }
+      footer strong {
+        color: var(--white);
+      }
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .footer-links a {
+        color: var(--white-d);
+        text-decoration: none;
+        font-size: 12px;
+      }
+      .footer-links a:hover {
+        color: var(--gold);
+      }
+
+      /* ── PIPELINE ── */
+      .pipeline {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: relative;
+      }
+      .pipeline::before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: 36px;
+        bottom: 36px;
+        width: 2px;
+        background: linear-gradient(
+          to bottom,
+          var(--sage),
+          var(--gold),
+          var(--sage-l)
+        );
+      }
+      .pipe-step {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        position: relative;
+        padding: 16px 0;
+      }
+      .pipe-dot {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        z-index: 1;
+        background: var(--bg3);
+        border: 2px solid var(--sage);
+        color: var(--sage-l);
+      }
+      .pipe-dot.gold {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .pipe-content h4 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 4px;
+      }
+      .pipe-content p {
+        font-size: 13px;
+        color: var(--white-d);
+        line-height: 1.5;
+      }
+      .pipe-content .impact {
+        font-size: 12px;
+        color: var(--sage-l);
+        font-weight: 500;
+        margin-top: 4px;
+      }
+
+      /* ── MOAT ── */
+      .moat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      @media (max-width: 700px) {
+        .moat-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .moat-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+      }
+      .moat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--sage), var(--gold));
+      }
+      .moat-card h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--gold);
+        margin-bottom: 10px;
+      }
+      .moat-card p {
+        font-size: 14px;
+        color: var(--white-d);
+        line-height: 1.6;
+      }
+
+      /* ── STATUS ── */
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 12px;
+      }
+      .status-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 13px;
+        color: var(--white-d);
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .status-dot.done {
+        background: #72b87a;
+        box-shadow: 0 0 6px rgba(114, 184, 122, 0.4);
+      }
+      .status-dot.ready {
+        background: var(--gold);
+        box-shadow: 0 0 6px rgba(212, 165, 116, 0.4);
+      }
+      .status-dot.planned {
+        background: var(--white-d);
+      }
+      .status-label {
+        color: var(--white);
+        font-weight: 500;
+      }
+
+      /* ── TOOLS ── */
+      .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      @media (max-width: 700px) {
+        .tools-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .tool-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+      }
+      .tool-num {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--sage-l);
+        margin-bottom: 12px;
+      }
+      .tool-card h3 {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 10px;
+      }
+      .tool-card p {
+        font-size: 14px;
+        color: var(--white-d);
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+      .tool-detail {
+        font-size: 12px;
+        color: var(--gold);
+        font-weight: 500;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+      }
+
+      /* ── DIVIDER ── */
+      .gold-rule {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold-d),
+          transparent
+        );
+        margin: 0 40px;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 600px) {
+        nav {
+          padding: 0 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        section {
+          padding: 60px 20px;
+        }
+        .form-card {
+          padding: 28px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-logo">sturij <span>TradeAI</span></div>
+      <div class="nav-links">
+        <a href="#problem">The problem</a>
+        <a href="#pipeline">The pipeline</a>
+        <a href="#economics">The numbers</a>
+        <a href="#built">What's built</a>
+        <a href="#ai-ops">Mission Control</a>
+        <a href="#founder">About us</a>
+      </div>
+      <a href="#register" class="nav-cta">Register interest</a>
+    </nav>
+
+    <!-- HERO -->
+
+    <section id="hero">
+      <div>
+        <div class="hero-eyebrow">
+          TradeAI by Sturij &nbsp;·&nbsp; Now recruiting founding joiners
+        </div>
+        <h1 class="hero-h1">
+          The nationals charge £8,000.<br /><em>You can deliver better</em
+          ><br />for £1,500.
+        </h1>
+        <p class="hero-sub">
+          TradeAI gives independent joiners the design tools, buying power, and
+          manufacturing network to compete with any national company. Free to
+          use. No catch.
+        </p>
+        <div class="hero-ctas">
+          <a href="#register" class="btn-primary">Register your interest</a>
+          <a href="#how" class="btn-ghost">See how it works</a>
+        </div>
+        <div class="trust-bar">
+          <div class="trust-item">
+            <div>
+              <div class="trust-score">4.9</div>
+              <div class="trust-stars">★★★★★</div>
+            </div>
+            <div class="trust-label">97 reviews<br />on Trustpilot</div>
+          </div>
+          <div class="trust-sep"></div>
+          <div class="trust-item">
+            <div class="trust-score">£1,500</div>
+            <div class="trust-label">
+              total delivered cost<br />3m fitted wardrobe
+            </div>
+          </div>
+          <div class="trust-sep"></div>
+          <div class="trust-item">
+            <div class="trust-score">£3,500+</div>
+            <div class="trust-label">what your customer<br />happily pays</div>
+          </div>
+          <div class="trust-sep"></div>
+          <div class="trust-item">
+            <div class="trust-score">Free</div>
+            <div class="trust-label">platform access<br />no subscription</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- PROBLEM -->
+
+    <section id="problem">
+      <div class="two-col">
+        <div>
+          <div class="section-eyebrow">The problem</div>
+          <h2 class="section-h2">
+            You have the skill.<br />They have the <em>infrastructure.</em>
+          </h2>
+          <p class="body-text">
+            The nationals spend millions on showrooms, software, and marketing.
+            Not because their product is better — it isn't. But because you
+            don't have the tools to show a customer what you can do, quote it
+            instantly, and deliver it seamlessly.
+          </p>
+          <p class="body-text">
+            So they win jobs they don't deserve. And you undercharge for jobs
+            you've already earned.
+          </p>
+        </div>
+        <div class="problem-card">
+          <h3>What holds independent joiners back</h3>
+          <ul class="problem-list">
+            <li>No professional customer-facing design tools</li>
+            <li>No instant quoting — days or weeks to respond</li>
+            <li>No buying power — paying retail on materials</li>
+            <li>No workshop — manufacturing eats your time</li>
+            <li>No consumer finance to offer customers</li>
+            <li>No business automation — admin kills evenings</li>
+            <li>No brand presence to compete online</li>
+            <li>No support when things go wrong on site</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- HOW IT WORKS -->
+
+    <section
+      id="how"
+      style="background: var(--bg2); max-width: none; padding: 100px 0"
+    >
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 40px">
+        <div class="section-eyebrow" style="text-align: center">
+          How TradeAI works
+        </div>
+        <h2 class="section-h2" style="text-align: center; margin-bottom: 60px">
+          Quote it. Build it.<br /><em>Install it. Get paid.</em>
+        </h2>
+        <div class="steps">
+          <div class="step-card">
+            <div class="step-n">01</div>
+            <h3>Your customer designs it in a conversation</h3>
+            <p>
+              They tell the AI their room, their style, their colours. The AI
+              guides them through every choice. They see a render of the
+              finished wardrobe. You get a complete specification, a floor plan,
+              and a quote. No site visit needed to start.
+            </p>
+          </div>
+          <div class="step-card" style="border-top-color: var(--gold)">
+            <div class="step-n" style="color: rgba(212, 165, 116, 0.3)">02</div>
+            <h3>Deposit paid. Materials ordered. Workshop scheduled.</h3>
+            <p>
+              When your customer pays a deposit, TradeAI orders the materials
+              automatically — at buying group prices, better than your trade
+              account. They arrive next day. Our workshop cuts and prepares
+              everything to a precision cut file. You collect a crate.
+            </p>
+          </div>
+          <div class="step-card" style="border-top-color: var(--sage-l)">
+            <div class="step-n" style="color: rgba(107, 153, 112, 0.3)">03</div>
+            <h3>You install. One day. Premium result.</h3>
+            <p>
+              Everything arrives ready to assemble. Panels cut to ±1mm. Edge
+              banded. Hardware included. One day on site. Your customer gets a
+              premium bespoke product. You earn more than you would charging
+              twice as long for a basic job.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- FEATURES -->
+
+    <section id="features">
+      <div class="section-eyebrow">The platform</div>
+      <h2 class="section-h2" style="margin-bottom: 40px">
+        Everything you need.<br /><em>Nothing you don't.</em>
+      </h2>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">◈</div>
+          <h3>AI wardrobe configurator</h3>
+          <p>
+            Chat-based design tool your customers use themselves. Any dimension,
+            any finish, any colour. Produces a specification and render
+            automatically.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◉</div>
+          <h3>Buying group materials</h3>
+          <p>
+            Access to trade materials at volume discount prices. Frequently
+            better than your existing trade account — after our margin.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⊞</div>
+          <h3>Workshop manufacture</h3>
+          <p>
+            CNC-precise panels, edge banded, hardware included. Flat-rate £800
+            per job. Ready to collect next day. No workshop needed.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◎</div>
+          <h3>Instant quoting</h3>
+          <p>
+            Quote generated from the specification automatically. Customer sees
+            the price during the design conversation. No back and forth.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⊡</div>
+          <h3>Consumer finance</h3>
+          <p>
+            Offer your customers monthly payment options. Powered by
+            Ideal4Finance. You get paid immediately. They get what they want.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◐</div>
+          <h3>Business automation</h3>
+          <p>
+            Quotes, invoices, scheduling, tax returns. Xero integrated. The
+            system handles the admin that kills your evenings and weekends.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◑</div>
+          <h3>AI playground</h3>
+          <p>
+            Customer sends a photo of a wardrobe they love. AI deconstructs it
+            into a specification you can manufacture. Any inspiration, any
+            source.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◫</div>
+          <h3>Parametric furniture</h3>
+          <p>
+            Bedside tables, drawer units, occasional furniture — all
+            parametrically sized. Manufactured from offcuts at near-zero
+            materials cost.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- PIPELINE -->
+
+    <section
+      id="pipeline"
+      style="background: var(--bg2); max-width: none; padding: 100px 0"
+    >
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 40px">
+        <div class="section-eyebrow" style="text-align: center">
+          The intelligence pipeline
+        </div>
+        <h2 class="section-h2" style="text-align: center; margin-bottom: 60px">
+          Room survey to <em>machine output.</em><br />One pipeline. One data
+          source.
+        </h2>
+        <div class="two-col" style="gap: 40px">
+          <div class="pipeline">
+            <div class="pipe-step">
+              <div class="pipe-dot">1</div>
+              <div class="pipe-content">
+                <h4>Room Survey Tool</h4>
+                <p>
+                  Browser-based floorplan capture: walls, doors, windows,
+                  radiators, electrical points, measurements.
+                </p>
+                <div class="impact">→ Eliminates return site visits</div>
+              </div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-dot">2</div>
+              <div class="pipe-content">
+                <h4>Wardrobe Configurator</h4>
+                <p>
+                  Room dimensions + customer preferences → construction rulebook
+                  → 4 synchronised views: plan, elevation, 3D, panel schedule.
+                </p>
+                <div class="impact">→ Quote in 10 minutes vs. 24 hours</div>
+              </div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-dot gold">3</div>
+              <div class="pipe-content">
+                <h4>AI Image Generation</h4>
+                <p>
+                  Photorealistic lifestyle renders from configurator output.
+                  Customer sees their wardrobe in their room before committing.
+                </p>
+                <div class="impact">
+                  → Marketing-quality visuals at point of sale
+                </div>
+              </div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-dot">4</div>
+              <div class="pipe-content">
+                <h4>Nesting Engine</h4>
+                <p>
+                  2D guillotine bin-packing with grain constraints. Board
+                  optimisation. Offcut tracking.
+                </p>
+                <div class="impact">→ Target: 0% material waste</div>
+              </div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-dot">5</div>
+              <div class="pipe-content">
+                <h4>G-code Generator</h4>
+                <p>
+                  Direct CNC machine output from panel schedule. Verified
+                  against real production files.
+                </p>
+                <div class="impact">→ Design-to-machine in one pipeline</div>
+              </div>
+            </div>
+            <div class="pipe-step">
+              <div class="pipe-dot gold">6</div>
+              <div class="pipe-content">
+                <h4>Manufacturing Intelligence</h4>
+                <p>
+                  Panel damage logging, offcut QR tracking, pre-job risk
+                  scoring, continuous improvement dashboard.
+                </p>
+                <div class="impact">
+                  → Every cut logged. Data compounds. Waste eliminated.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="pull-quote" style="margin-top: 0">
+              <p>
+                "Not a configurator. Not a CNC plugin. A complete manufacturing
+                intelligence platform that connects every stage of the
+                workflow."
+              </p>
+            </div>
+            <p class="body-text" style="margin-top: 32px">
+              Every view — plan, elevation, 3D, panel schedule — renders from
+              the same data object. Change the input once, all four views
+              update. One source of truth from room survey to machine output.
+            </p>
+            <p class="body-text">
+              100+ curated Egger decors with Lawcris trade pricing. 220+
+              seamless tileable textures. 228 complementary decor pairings from
+              Egger's own recommendation data. All codified into the platform.
+            </p>
+            <div
+              style="
+                margin-top: 32px;
+                padding: 20px;
+                background: var(--bg3);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+              "
+            >
+              <div
+                style="
+                  font-size: 12px;
+                  color: var(--gold);
+                  font-weight: 600;
+                  letter-spacing: 1px;
+                  text-transform: uppercase;
+                  margin-bottom: 12px;
+                "
+              >
+                12-Month targets
+              </div>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px"
+              >
+                <div>
+                  <div
+                    style="
+                      font-size: 24px;
+                      font-weight: 600;
+                      color: var(--white);
+                    "
+                  >
+                    < 10 min
+                  </div>
+                  <div style="font-size: 12px; color: var(--white-d)">
+                    Pre-sale design time<br />(from 24+ hours)
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 24px;
+                      font-weight: 600;
+                      color: var(--white);
+                    "
+                  >
+                    70%+
+                  </div>
+                  <div style="font-size: 12px; color: var(--white-d)">
+                    Quote conversion rate<br />(from ~50%)
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 24px;
+                      font-weight: 600;
+                      color: var(--white);
+                    "
+                  >
+                    < 2%
+                  </div>
+                  <div style="font-size: 12px; color: var(--white-d)">
+                    Material waste rate<br />(from untracked)
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 24px;
+                      font-weight: 600;
+                      color: var(--white);
+                    "
+                  >
+                    3×
+                  </div>
+                  <div style="font-size: 12px; color: var(--white-d)">
+                    Quotes per week<br />(from 3–4 to 10–12)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- MOAT -->
+
+    <section id="moat">
+      <div class="section-eyebrow" style="text-align: center">
+        Why this can't be copied
+      </div>
+      <h2 class="section-h2" style="text-align: center; margin-bottom: 48px">
+        Three advantages that <em>compound over time.</em>
+      </h2>
+      <div class="moat-grid">
+        <div class="moat-card">
+          <h3>The Data Flywheel</h3>
+          <p>
+            Every board cut is training data. Every damaged panel is a data
+            point. Every offcut tracked is waste measured. The manufacturing
+            intelligence layer gets smarter with every job. After 6 months, the
+            system predicts panel movement risk before the machine runs. No
+            competitor has this dataset because no competitor is collecting it.
+          </p>
+        </div>
+        <div class="moat-card">
+          <h3>The Material Library</h3>
+          <p>
+            100+ curated Egger decors with Lawcris trade pricing. 220+ seamless
+            tileable textures. 228 complementary decor pairings from Egger's own
+            recommendation data. This is codified material intelligence that
+            takes years to build and cannot be replicated by plugging in a
+            catalogue.
+          </p>
+        </div>
+        <div class="moat-card">
+          <h3>The Construction Rulebook</h3>
+          <p>
+            20+ years of fitted furniture knowledge encoded as deterministic
+            manufacturing rules — not approximations. Every dimension,
+            tolerance, and assembly constraint matches what gets cut on the CNC.
+            This is IP that no software vendor has because no software vendor
+            has built fitted furniture.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- ECONOMICS -->
+
+    <section
+      id="economics"
+      style="background: var(--bg2); max-width: none; padding: 100px 0"
+    >
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 40px">
+        <div class="section-eyebrow">The numbers</div>
+        <h2 class="section-h2" style="margin-bottom: 16px">
+          The economics that <em>change your business</em>
+        </h2>
+        <p class="body-text" style="max-width: 600px; margin-bottom: 40px">
+          A single wardrobe job. What it costs. What you charge. What you keep.
+          Compared to doing it alone — and compared to what the nationals
+          charge.
+        </p>
+
+        <div class="pull-quote">
+          <p>
+            "A premium bespoke wardrobe. Quoted in a conversation. Manufactured
+            overnight. Ready to install tomorrow. Under £1,500 all in. You sell
+            it for £3,500. The nationals charge £8,000 for less."
+          </p>
+        </div>
+
+        <table class="econ-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Without TradeAI</th>
+              <th>With TradeAI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Materials (3m wardrobe)</td>
+              <td>£600 (trade account)</td>
+              <td class="good">Under £550 (buying group)</td>
+            </tr>
+            <tr>
+              <td>Manufacture / cutting</td>
+              <td>1-2 days of your time</td>
+              <td class="highlight">£800 flat — your time freed</td>
+            </tr>
+            <tr>
+              <td>Installation</td>
+              <td>1 day</td>
+              <td>1 day</td>
+            </tr>
+            <tr>
+              <td>Total cost to you</td>
+              <td>£600 + 2-3 days labour</td>
+              <td class="highlight">Under £1,500 total</td>
+            </tr>
+            <tr>
+              <td>Realistic customer price</td>
+              <td>£2,500–£3,000</td>
+              <td class="good">£3,000–£4,500</td>
+            </tr>
+            <tr>
+              <td>Nationals charge</td>
+              <td colspan="2" style="color: var(--coral); font-weight: 600">
+                £5,000–£8,000. For a lesser product.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- SOCIAL PROOF -->
+
+    <section id="reviews">
+      <div class="section-eyebrow">Social proof</div>
+      <h2 class="section-h2" style="margin-bottom: 8px">
+        4.9 stars. 97 reviews.<br /><em>Real customers. Real results.</em>
+      </h2>
+      <p class="body-text" style="margin-bottom: 40px">
+        Every process and tool in TradeAI has been built inside a real furniture
+        business — not from a product manager's imagination. These are our
+        customers.
+      </p>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            "We are thrilled with our new wardrobes and cabinets. The colour and
+            build are perfect. Will worked like a machine — a fantastic job
+            completed on time. Would not hesitate to recommend."
+          </p>
+          <div class="review-author">Tynegirl</div>
+          <div class="review-source">
+            Verified Trustpilot review · March 2026
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            "An overall great experience, from Will coming out several times to
+            design exactly what we wanted, to Dave who came to build it all and
+            make our dream become a reality. Nothing is too much for the Sturij
+            team."
+          </p>
+          <div class="review-author">Sue Weatherdon</div>
+          <div class="review-source">
+            Verified Trustpilot review · October 2025
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            "Really pleased with the job Dave did for us, transforming a room
+            with basic wooden shelving into proper storage. It was a fiddly job
+            and the result is fantastic. Quality craftsmanship throughout."
+          </p>
+          <div class="review-author">Gillian</div>
+          <div class="review-source">
+            Verified Trustpilot review · November 2025
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 32px">
+        <a
+          href="https://www.trustpilot.com/review/sturij.com"
+          target="_blank"
+          style="color: var(--gold); font-size: 14px; text-decoration: none"
+          >Read all 97 reviews on Trustpilot →</a
+        >
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- WHAT'S BUILT -->
+
+    <section
+      id="built"
+      style="background: var(--bg2); max-width: none; padding: 100px 0"
+    >
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 40px">
+        <div class="section-eyebrow" style="text-align: center">
+          Not a concept
+        </div>
+        <h2 class="section-h2" style="text-align: center; margin-bottom: 16px">
+          This is built. <em>This is real.</em>
+        </h2>
+        <p
+          class="body-text"
+          style="text-align: center; max-width: 600px; margin: 0 auto 40px"
+        >
+          The core engine is complete and producing verified output. Every green
+          dot below is working in production today.
+        </p>
+        <div class="status-grid">
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">Construction rulebook</span> — all 5
+            section types
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">Panel generation</span> — deterministic,
+            tested
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">Bin-packing nesting</span> — grain
+            constraints
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">Material library</span> — 100+ Egger
+            decors
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">4 synchronised views</span> — plan,
+            elevation, 3D, schedule
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">AI image generation</span> — prompt
+            pipeline
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">3D texture mapping</span> — real Egger
+            textures
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">Production time calc</span> —
+            board-by-board
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">CNC post-processor</span> — Fanuc gcode
+            confirmed
+          </div>
+          <div class="status-item">
+            <div class="status-dot done"></div>
+            <span class="status-label">Fittings catalogue</span> — Blum hardware
+            + pricing
+          </div>
+          <div class="status-item">
+            <div class="status-dot ready"></div>
+            <span class="status-label">G-code generator</span> — specified,
+            ready to build
+          </div>
+          <div class="status-item">
+            <div class="status-dot ready"></div>
+            <span class="status-label">Egger product DB</span> — 429 products,
+            schema ready
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- WORKSHOP TOOLS -->
+
+    <section id="workshop">
+      <div class="section-eyebrow" style="text-align: center">
+        Workshop intelligence
+      </div>
+      <h2 class="section-h2" style="text-align: center; margin-bottom: 16px">
+        Three tools. <em>Built for the machine.</em>
+      </h2>
+      <p
+        class="body-text"
+        style="text-align: center; max-width: 600px; margin: 0 auto 48px"
+      >
+        Big tap targets, no typing, works on your phone. Nothing replaces your
+        skill — these give you better information and learn from what happens.
+      </p>
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-num">Tool 01</div>
+          <h3>Nesting Visualiser</h3>
+          <p>
+            See the board layout before you cut. Every panel labelled, cut
+            sequence numbered, grain direction marked. After cutting, compare
+            planned vs actual.
+          </p>
+          <div class="tool-detail">
+            Board outline to scale · Part labels · Cut sequence · Grain arrows
+          </div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-num">Tool 02</div>
+          <h3>Damage Logger</h3>
+          <p>
+            Panel moved or damaged? Three taps: tap the panel, select the type,
+            select severity. No forms. No typing. Optionally snap a photo. The
+            system spots patterns over time.
+          </p>
+          <div class="tool-detail">
+            3 seconds to log · Predicts risk after 6 months of data
+          </div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-num">Tool 03</div>
+          <h3>Offcut Scanner</h3>
+          <p>
+            Every usable offcut gets a QR code. Scan to see dimensions,
+            material, status. When a new job can use an existing offcut, the
+            system flags it. Walk-and-scan audits.
+          </p>
+          <div class="tool-detail">
+            QR tracking · Available / Reserved / Used / Disposed
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- FOUNDER -->
+
+    <section
+      id="founder"
+      style="background: var(--bg2); max-width: none; padding: 100px 0"
+    >
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 40px">
+        <div class="section-eyebrow">Who we are</div>
+        <h2 class="section-h2" style="margin-bottom: 40px">
+          Built from the inside of a <em>real furniture business.</em>
+        </h2>
+        <div class="founder-block">
+          <div class="founder-stats">
+            <div class="founder-stat">
+              <div class="num">£7.1M</div>
+              <div class="label">Previous agency exit<br />sold to Unrvld</div>
+            </div>
+            <div class="founder-stat">
+              <div class="num">25+</div>
+              <div class="label">Years building<br />digital businesses</div>
+            </div>
+            <div class="founder-stat">
+              <div class="num">4.9★</div>
+              <div class="label">Trustpilot score<br />97 verified reviews</div>
+            </div>
+            <div class="founder-stat">
+              <div class="num">£0</div>
+              <div class="label">Workshop debt.<br />Built the right way.</div>
+            </div>
+          </div>
+          <div>
+            <p class="body-text">
+              The founder of Sturij spent twenty-five years building Delete
+              Agency — one of the UK's most respected independent digital
+              businesses — and sold it for £7.1 million. Before that: financial
+              services. Between that: a property development in Harrogate,
+              working on site for a year, fitting every wardrobe and kitchen
+              personally.
+            </p>
+            <p class="body-text">
+              That combination — commercial discipline, digital experience,
+              hands-on trade knowledge — is exactly why TradeAI is different. It
+              wasn't designed by a product manager who's never held a panel saw.
+              It was built by someone who has been on both sides of the problem:
+              as a customer paying national prices and wondering why, and as a
+              manufacturer knowing exactly what it actually costs.
+            </p>
+            <p class="body-text">
+              One million pounds of personal capital invested. A debt-free
+              workshop. A team of four including three qualified joiners. Four
+              years of learning. TradeAI is the result.
+            </p>
+            <div class="founder-creds">
+              <div class="cred-item">
+                Delete Agency — founded, built, sold to Unrvld for £7.1M
+              </div>
+              <div class="cred-item">
+                ByteMinds — digital marketing, 25+ years
+              </div>
+              <div class="cred-item">
+                Harrogate apartment development — 8 units, conservation area,
+                complex planning
+              </div>
+              <div class="cred-item">
+                Sturij — founded 2020, debt-free, 4.9 stars, 97 reviews
+              </div>
+              <div class="cred-item">
+                TradeAI — AI platform for the independent joinery trade
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- AI OPERATIONS -->
+
+    <section id="ai-ops">
+      <div class="section-eyebrow" style="text-align: center">
+        AI operations
+      </div>
+      <h2 class="section-h2" style="text-align: center; margin-bottom: 16px">
+        Mission Control. <em>The all-seeing eye.</em>
+      </h2>
+      <p
+        class="body-text"
+        style="text-align: center; max-width: 640px; margin: 0 auto 48px"
+      >
+        A live operations dashboard that monitors agents, costs, code,
+        customers, and manufacturing. It acts without you prompting it.
+      </p>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">◉</div>
+          <h3>Agent health monitoring</h3>
+          <p>
+            Which agents are running, their status, error rates, current tasks.
+            Green/amber/red at a glance. Automatic pause on failures.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◈</div>
+          <h3>LLM cost tracking</h3>
+          <p>
+            Token usage per agent, per model, per day. Budget gauges with
+            threshold alerts. Route cheap tasks to cheap models automatically.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⊞</div>
+          <h3>Code & deployment</h3>
+          <p>
+            Active branches, open PRs, build status, test results, deployment
+            state. All from GitHub and Vercel APIs in real time.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◎</div>
+          <h3>Autonomous workflows</h3>
+          <p>
+            Morning briefings at 7:30am. Enquiry auto-capture from Gmail.
+            Deposit alerts from Xero. Weekly conformance audits. No prompting
+            required.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◐</div>
+          <h3>Multi-model routing</h3>
+          <p>
+            Haiku for chat. Sonnet for coding. Opus for architecture. Qwen 3
+            locally for private data. Gemini for images. Right model, right
+            task, right cost.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">◑</div>
+          <h3>Knowledge health</h3>
+          <p>
+            Document freshness monitoring. Coverage gap analysis. Decision log
+            growth. Memory file health. The knowledge base stays current
+            automatically.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- SKILLS LIBRARY -->
+
+    <section
+      id="skills"
+      style="background: var(--bg2); max-width: none; padding: 100px 0"
+    >
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 40px">
+        <div class="section-eyebrow" style="text-align: center">
+          Skills ecosystem
+        </div>
+        <h2 class="section-h2" style="text-align: center; margin-bottom: 48px">
+          220+ production skills. <em>Curated for Sturij.</em>
+        </h2>
+        <div class="steps">
+          <div class="step-card">
+            <div class="step-n">01</div>
+            <h3>Foundation skills</h3>
+            <p>
+              Memory architecture, agent guardrails, cost monitoring. The
+              bedrock that makes everything else work. Install day one.
+            </p>
+          </div>
+          <div class="step-card" style="border-top-color: var(--gold)">
+            <div class="step-n" style="color: rgba(212, 165, 116, 0.3)">02</div>
+            <h3>Engineering skills</h3>
+            <p>
+              Senior architect, senior frontend, code reviewer, security
+              auditor, QA engineer. Production-grade expertise as executable
+              instructions.
+            </p>
+          </div>
+          <div class="step-card" style="border-top-color: var(--sage-l)">
+            <div class="step-n" style="color: rgba(107, 153, 112, 0.3)">03</div>
+            <h3>Business skills</h3>
+            <p>
+              Investment advisor, SaaS metrics coach, financial analyst. Plus
+              custom personas: manufacturing engineer, investor relations,
+              startup CTO.
+            </p>
+          </div>
+        </div>
+        <div class="pull-quote" style="margin-top: 40px">
+          <p>
+            "Skills are executable standards. They're the checks and balances
+            missing when agents self-configure. Not code — not documentation —
+            executable instructions."
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="gold-rule"></div>
+
+    <!-- REGISTER -->
+
+    <section id="register">
+      <div class="form-card">
+        <h2 class="form-title">Register your interest</h2>
+        <p class="form-sub">
+          We are launching TradeAI to a founding cohort of joiners in Yorkshire
+          and the North of England. Register now to be considered for early
+          access and the best terms we will ever offer.
+        </p>
+        <form id="reg-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">First name</label>
+              <input type="text" id="fname" placeholder="John" required />
+            </div>
+            <div class="form-group">
+              <label for="lname">Last name</label>
+              <input type="text" id="lname" placeholder="Smith" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="john@smithjoinery.co.uk"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone">Mobile number</label>
+            <input type="tel" id="phone" placeholder="07700 000000" />
+          </div>
+          <div class="form-group">
+            <label for="business">Business name (if trading)</label>
+            <input type="text" id="business" placeholder="Smith Joinery" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="location">Your location</label>
+              <input
+                type="text"
+                id="location"
+                placeholder="Leeds, Yorkshire"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="jobs">Fitted furniture jobs per month</label>
+              <select id="jobs">
+                <option value="">Select...</option>
+                <option>1–2 jobs</option>
+                <option>3–5 jobs</option>
+                <option>6–10 jobs</option>
+                <option>10+ jobs</option>
+                <option>None yet — interested to start</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="workshop">Do you have your own workshop?</label>
+            <select id="workshop">
+              <option value="">Select...</option>
+              <option>Yes — full workshop with machinery</option>
+              <option>Yes — basic workshop / garage</option>
+              <option>No — I work on site only</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Anything else you'd like us to know?</label>
+            <textarea
+              id="message"
+              rows="3"
+              placeholder="Tell us about your business, what you're looking for, or any questions..."
+            ></textarea>
+          </div>
+          <button type="submit" class="form-submit">
+            Register my interest →
+          </button>
+          <p class="form-note">
+            No commitment. No spam. We will be in touch personally within 48
+            hours.
+          </p>
+        </form>
+        <div class="form-success" id="form-success">
+          <div style="font-size: 32px; margin-bottom: 12px">✓</div>
+          <div>Thank you. We will be in touch within 48 hours.</div>
+          <div style="font-size: 13px; color: var(--white-d); margin-top: 8px">
+            Check your email — including spam — for a confirmation.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>
+        <strong>Sturij</strong> · Storage Innovation Limited · Registered in
+        England
+      </div>
+      <div style="margin-top: 6px; color: var(--white-d); font-size: 12px">
+        TradeAI is a platform operated by Sturij. Sturij is a registered
+        trademark.
+      </div>
+      <div class="footer-links">
+        <a href="https://sturij.com">sturij.com</a>
+        <a href="https://www.trustpilot.com/review/sturij.com"
+          >Trustpilot reviews</a
+        >
+        <a href="mailto:hello@sturij.com">hello@sturij.com</a>
+      </div>
+    </footer>
+
+    <script>
+      function handleSubmit(e) {
+        e.preventDefault();
+        document.getElementById("reg-form").style.display = "none";
+        document.getElementById("form-success").style.display = "block";
+      }
+
+      // Smooth nav highlight
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll(".nav-links a");
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((s) => {
+          if (window.scrollY >= s.offsetTop - 100) current = s.id;
+        });
+        navLinks.forEach((a) => {
+          a.style.color =
+            a.getAttribute("href") === "#" + current ? "var(--white)" : "";
+        });
+      });
+    </script>
+  </body>
+</html>
