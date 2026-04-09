@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import notebookCover from "figma:asset/d0a4869d5343fc1fe3e63084e5332011c9da648b.png";
+import notebookCover from '../../assets/notebook-cover.jpg';
+import notebookPage from '../../assets/notebook-page.jpg';
 
 // ─── HIDE SCROLLBARS — inject once ───────────────────────────────────────────
 if (typeof document !== "undefined" && !document.getElementById("nb-no-scroll")) {

@@ -1,6 +1,19 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --nb-bg: #111614;
+  --nb-bg2: #171d18;
+  --nb-bg3: #1e2620;
+  --nb-border: #2a352b;
+  --nb-accent: #d4a574;
+  --nb-accent-dim: rgba(212, 165, 116, 0.2);
+  --nb-text: #f0ede6;
+  --nb-text-muted: #9fa89f;
+  --nb-sage: #4a5d4e;
+  --nb-sage-l: #6b9970;
+  --nb-coral: #e07555;
+  --nb-green: #72b87a;
+
   --font-size: 16px;
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
