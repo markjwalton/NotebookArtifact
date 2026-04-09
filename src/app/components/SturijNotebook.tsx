@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import notebookCover from '../../assets/notebook-cover.jpg';
 import notebookPage from '../../assets/notebook-page.jpg';
+import { FormsArtifact, issueFormSchema } from './FormsArtifact';
+import type { FormField } from './FormsArtifact';
 
 // ─── HIDE SCROLLBARS — inject once ───────────────────────────────────────────
 if (typeof document !== "undefined" && !document.getElementById("nb-no-scroll")) {
@@ -354,15 +356,11 @@ function IndexView({issues,notebooks,nb,onNb,onAdd,onSelect}:IVP) {
   );
 }
 
-// ─── ADD ENTRY VIEW ─────────────────────────────────────���─────────────────────
+// ─── ADD ENTRY VIEW ───────────────────────────────────────────────────────────
 interface AVP {notebooks:string[];nb:string;onSubmit:(d:Omit<Issue,"id"|"dateAdded"|"status"|"aiStatus"|"aiMessage"|"aiRating">)=>Promise<boolean>;onBack:()=>void;}
 function AddEntryView({notebooks,nb,onSubmit,onBack}:AVP) {
-  const [title,setTitle]=useState("");
-  const [type,setType]=useState<IssueType>("Bug");
-  const [sev,setSev]=useState<Severity>("Medium");
   const [notebook,setNotebook]=useState(nb);
-  const [desc,setDesc]=useState("");
-  const [enhancing,setEnhancing]=useState(false);
+  const [enhancingDesc,setEnhancingDesc]=useState(false);
   const [points,setPoints]=useState<IssuePoint[]>([]);
   const [pt,setPt]=useState("");
   const [files,setFiles]=useState<AttachedFile[]>([]);
@@ -373,8 +371,6 @@ function AddEntryView({notebooks,nb,onSubmit,onBack}:AVP) {
 
   const addPt=()=>{ if(!pt.trim())return; setPoints(p=>[...p,{id:uid(),text:pt.trim(),completed:false}]); setPt(""); };
 
-  const handleEnhance=async()=>{ if(!desc.trim()||enhancing)return; setEnhancing(true); setDesc(await aiEnhance(desc)); setEnhancing(false); };
-
   const readFiles=(fl:FileList|null)=>{
     if(!fl)return;
     Array.from(fl).forEach(f=>{
@@ -384,18 +380,92 @@ function AddEntryView({notebooks,nb,onSubmit,onBack}:AVP) {
     });
   };
 
-  const handleSubmit=async()=>{
-    if(!title.trim()){setErr("title is required.");return;}
-    if(desc.trim().length<20 && points.length===0){setErr("description too brief — the ai needs more context to work with.");return;}
-    setErr(""); setSubmitting(true);
-    const ok=await onSubmit({title:title.trim(),type,severity:sev,description:desc.trim(),points,notebook,user:"Will",files});
-    if(!ok) setErr("ai rejected this entry — please add more detail and resubmit.");
-    setSubmitting(false);
-  };
-
   const thinBtn: React.CSSProperties = {
     background:"none",border:`1px solid ${P.ghost}`,borderRadius:2,
     padding:"2px 8px",fontSize:9,cursor:"pointer",color:P.fade,fontFamily:FONT,letterSpacing:0.6,
+  };
+
+  /** Notebook-skin field renderer — FormsArtifact controls state, we control visuals */
+  const nbRenderField = (field: FormField, value: unknown, onChange: (v: unknown) => void, error?: string) => {
+    const strVal = (value as string) || '';
+
+    if (field.id === 'title') {
+      return (
+        <div>
+          <label style={LBL}>{field.label} {field.required && '*'}</label>
+          <input type="text" value={strVal} onChange={e=>onChange(e.target.value)}
+            placeholder={field.placeholder || "clear, concise issue title…"} style={inkField({fontSize:13})} />
+          {error && <div style={{fontSize:10,color:SEV_COL.Critical,fontFamily:FONT,marginTop:2}}>{error}</div>}
+        </div>
+      );
+    }
+
+    if (field.id === 'type' && field.type === 'select') {
+      return (
+        <div>
+          <label style={LBL}>{field.label}</label>
+          <select value={strVal} onChange={e=>onChange(e.target.value)} style={inkField({cursor:"pointer",appearance:"none"} as React.CSSProperties)}>
+            {!strVal && <option value="">Select…</option>}
+            {field.options?.map(o=>(
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+          {error && <div style={{fontSize:10,color:SEV_COL.Critical,fontFamily:FONT,marginTop:2}}>{error}</div>}
+        </div>
+      );
+    }
+
+    if (field.id === 'severity' && field.type === 'select') {
+      const sevCol = SEV_COL[strVal as Severity] || P.ink;
+      return (
+        <div>
+          <label style={LBL}>{field.label}</label>
+          <select value={strVal} onChange={e=>onChange(e.target.value)}
+            style={inkField({cursor:"pointer",appearance:"none",color:sevCol,fontWeight:400} as React.CSSProperties)}>
+            {!strVal && <option value="">Select…</option>}
+            {field.options?.map(o=>(
+              <option key={o.value} value={o.value} style={{color:SEV_COL[o.value as Severity]||P.ink}}>{o.label}</option>
+            ))}
+          </select>
+          {error && <div style={{fontSize:10,color:SEV_COL.Critical,fontFamily:FONT,marginTop:2}}>{error}</div>}
+        </div>
+      );
+    }
+
+    if (field.id === 'description' && field.type === 'textarea') {
+      const handleEnhance=async()=>{
+        if(!strVal.trim()||enhancingDesc)return;
+        setEnhancingDesc(true);
+        const enhanced = await aiEnhance(strVal);
+        onChange(enhanced);
+        setEnhancingDesc(false);
+      };
+      return (
+        <div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:2}}>
+            <label style={{...LBL,marginBottom:0}}>{field.label}</label>
+            <button onClick={handleEnhance} disabled={enhancingDesc||!strVal.trim()} style={{
+              ...thinBtn, color:enhancingDesc?"#4a8060":P.fade, opacity:!strVal.trim()?0.35:1,
+            }}>{enhancingDesc?"⟳ enhancing…":"✨ ai enhance"}</button>
+          </div>
+          <textarea value={strVal} onChange={e=>onChange(e.target.value)}
+            placeholder={field.placeholder || "describe context, expected vs actual behaviour…"}
+            rows={3} style={{...inkField({lineHeight:1.7,borderBottom:"none"}),
+              border:`1px solid ${P.line}`,padding:"4px 0",resize:"vertical" as const}} />
+          {error && <div style={{fontSize:10,color:SEV_COL.Critical,fontFamily:FONT,marginTop:2}}>{error}</div>}
+        </div>
+      );
+    }
+
+    // Fallback
+    return (
+      <div>
+        <label style={LBL}>{field.label}</label>
+        <input type="text" value={strVal} onChange={e=>onChange(e.target.value)}
+          placeholder={field.placeholder} style={inkField()} />
+        {error && <div style={{fontSize:10,color:SEV_COL.Critical,fontFamily:FONT,marginTop:2}}>{error}</div>}
+      </div>
+    );
   };
 
   return (
@@ -407,7 +477,7 @@ function AddEntryView({notebooks,nb,onSubmit,onBack}:AVP) {
 
       <NbScroll style={{flex:1,padding:`10px 14px 10px ${GUTTER+2}px`,display:"flex",flexDirection:"column",gap:11}}>
 
-        {/* Notebook */}
+        {/* Notebook selector — outside FormsArtifact (not in schema) */}
         <div>
           <label style={LBL}>notebook</label>
           <select value={notebook} onChange={e=>setNotebook(e.target.value)} style={inkField({cursor:"pointer",appearance:"none"} as React.CSSProperties)}>
@@ -415,112 +485,93 @@ function AddEntryView({notebooks,nb,onSubmit,onBack}:AVP) {
           </select>
         </div>
 
-        {/* Title */}
-        <div>
-          <label style={LBL}>title *</label>
-          <input type="text" value={title} onChange={e=>setTitle(e.target.value)}
-            placeholder="clear, concise issue title…" style={inkField({fontSize:13})} />
-        </div>
+        {/* FormsArtifact — handles title, type, severity, description state & validation */}
+        <FormsArtifact
+          schema={issueFormSchema}
+          onSubmit={async (data) => {
+            const desc = (data.description as string || '').trim();
+            if(desc.length<20 && points.length===0){setErr("description too brief — the ai needs more context to work with.");return;}
+            setErr(""); setSubmitting(true);
+            const ok=await onSubmit({
+              title:(data.title as string).trim(),
+              type:data.type as IssueType,
+              severity:data.severity as Severity,
+              description:desc,
+              points,notebook,user:"Will",files,
+            });
+            if(!ok) setErr("ai rejected this entry — please add more detail and resubmit.");
+            setSubmitting(false);
+          }}
+          renderField={nbRenderField}
+          renderActions={(onFormSubmit) => (
+            <>
+              {/* Error */}
+              {err && (
+                <div style={{fontSize:10,color:SEV_COL.Critical,fontFamily:FONT,lineHeight:1.6,
+                  borderLeft:`2px solid ${SEV_COL.Critical}66`,paddingLeft:8}}>
+                  {err}
+                </div>
+              )}
 
-        {/* Type + Severity */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
-          <div>
-            <label style={LBL}>type</label>
-            <select value={type} onChange={e=>setType(e.target.value as IssueType)} style={inkField({cursor:"pointer",appearance:"none"} as React.CSSProperties)}>
-              {(["Bug","Change","Question","New Feature","Action"] as IssueType[]).map(t=>(
-                <option key={t} value={t}>{TYPE_ICON[t]} {t}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label style={LBL}>severity</label>
-            <select value={sev} onChange={e=>setSev(e.target.value as Severity)}
-              style={inkField({cursor:"pointer",appearance:"none",color:SEV_COL[sev],fontWeight:400} as React.CSSProperties)}>
-              {(["Critical","High","Medium","Low"] as Severity[]).map(s=>(
-                <option key={s} value={s} style={{color:SEV_COL[s]}}>{s}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Description */}
-        <div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:2}}>
-            <label style={{...LBL,marginBottom:0}}>description</label>
-            <button onClick={handleEnhance} disabled={enhancing||!desc.trim()} style={{
-              ...thinBtn, color:enhancing?"#4a8060":P.fade, opacity:!desc.trim()?0.35:1,
-            }}>{enhancing?"⟳ enhancing…":"✨ ai enhance"}</button>
-          </div>
-          <textarea value={desc} onChange={e=>setDesc(e.target.value)}
-            placeholder="describe context, expected vs actual behaviour…"
-            rows={3} style={{...inkField({lineHeight:1.7,borderBottom:"none"}),
-              border:`1px solid ${P.line}`,padding:"4px 0",resize:"vertical" as const}} />
-        </div>
-
-        {/* Issue points */}
-        <div>
-          <label style={LBL}>issue points</label>
-          {points.map(p=>(
-            <div key={p.id} style={{display:"flex",alignItems:"flex-start",gap:6,marginBottom:3}}>
-              <span style={{fontSize:9,color:P.ghost,marginTop:4,flexShrink:0,fontFamily:FONT}}>—</span>
-              <span style={{flex:1,fontSize:11,color:P.ink,lineHeight:1.5,fontFamily:FONT}}>{p.text}</span>
-              <button onClick={()=>setPoints(ps=>ps.filter(x=>x.id!==p.id))}
-                style={{background:"none",border:"none",cursor:"pointer",color:SEV_COL.Critical+"88",fontSize:13,padding:"0 2px",flexShrink:0,fontFamily:FONT,lineHeight:1}}>×</button>
-            </div>
-          ))}
-          <div style={{display:"flex",gap:6}}>
-            <input type="text" value={pt} onChange={e=>setPt(e.target.value)}
-              onKeyDown={e=>e.key==="Enter"&&addPt()}
-              placeholder="add specific point… (Enter)" style={{...inkField(),flex:1}} />
-            <button onClick={addPt} disabled={!pt.trim()} style={{...thinBtn,opacity:pt.trim()?1:0.3,flexShrink:0}}>+</button>
-          </div>
-        </div>
-
-        {/* Attachments */}
-        <div>
-          <label style={LBL}>attachments</label>
-          {files.length>0 && (
-            <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:5}}>
-              {files.map(f=>(
-                <span key={f.id} style={{fontSize:9,color:P.fade,fontFamily:FONT}}>
-                  {f.isImage?"🖼":"📎"} {f.name.length>14?f.name.slice(0,14)+"…":f.name}
-                  <span onClick={()=>setFiles(fs=>fs.filter(x=>x.id!==f.id))}
-                    style={{cursor:"pointer",color:SEV_COL.Critical+"88",marginLeft:3}}>×</span>
-                </span>
-              ))}
-            </div>
-          )}
-          <input ref={fileRef} type="file" multiple style={{display:"none"}} onChange={e=>{readFiles(e.target.files);e.target.value="";}} />
-          <input ref={camRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>{readFiles(e.target.files);e.target.value="";}} />
-          <div style={{display:"flex",gap:14}}>
-            {[{icon:"📎",label:"attach file",ref:fileRef},{icon:"📷",label:"screenshot",ref:camRef}].map(b=>(
-              <button key={b.label} onClick={()=>b.ref.current?.click()}
-                style={{background:"none",border:"none",padding:0,fontSize:10,color:P.fade,cursor:"pointer",fontFamily:FONT}}>
-                {b.icon} {b.label}
+              {/* Submit */}
+              <button onClick={onFormSubmit} disabled={submitting} style={{
+                background:"transparent",border:`1px solid ${P.ghost}`,borderRadius:2,
+                padding:"8px",fontSize:10,cursor:submitting?"default":"pointer",
+                color:P.ink,fontFamily:FONT,letterSpacing:0.5,transition:"border-color 0.15s",
+              }}
+                onMouseEnter={e=>!submitting&&((e.currentTarget as HTMLElement).style.borderColor=P.fade)}
+                onMouseLeave={e=>((e.currentTarget as HTMLElement).style.borderColor=P.ghost)}
+              >
+                {submitting?"⟳ ai reviewing entry…":"submit to notebook →"}
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Error */}
-        {err && (
-          <div style={{fontSize:10,color:SEV_COL.Critical,fontFamily:FONT,lineHeight:1.6,
-            borderLeft:`2px solid ${SEV_COL.Critical}66`,paddingLeft:8}}>
-            {err}
-          </div>
-        )}
-
-        {/* Submit */}
-        <button onClick={handleSubmit} disabled={submitting} style={{
-          background:"transparent",border:`1px solid ${P.ghost}`,borderRadius:2,
-          padding:"8px",fontSize:10,cursor:submitting?"default":"pointer",
-          color:P.ink,fontFamily:FONT,letterSpacing:0.5,transition:"border-color 0.15s",
-        }}
-          onMouseEnter={e=>!submitting&&((e.currentTarget as HTMLElement).style.borderColor=P.fade)}
-          onMouseLeave={e=>((e.currentTarget as HTMLElement).style.borderColor=P.ghost)}
+            </>
+          )}
         >
-          {submitting?"⟳ ai reviewing entry…":"submit to notebook →"}
-        </button>
+          {/* Issue points — between fields and actions */}
+          <div>
+            <label style={LBL}>issue points</label>
+            {points.map(p=>(
+              <div key={p.id} style={{display:"flex",alignItems:"flex-start",gap:6,marginBottom:3}}>
+                <span style={{fontSize:9,color:P.ghost,marginTop:4,flexShrink:0,fontFamily:FONT}}>—</span>
+                <span style={{flex:1,fontSize:11,color:P.ink,lineHeight:1.5,fontFamily:FONT}}>{p.text}</span>
+                <button onClick={()=>setPoints(ps=>ps.filter(x=>x.id!==p.id))}
+                  style={{background:"none",border:"none",cursor:"pointer",color:SEV_COL.Critical+"88",fontSize:13,padding:"0 2px",flexShrink:0,fontFamily:FONT,lineHeight:1}}>×</button>
+              </div>
+            ))}
+            <div style={{display:"flex",gap:6}}>
+              <input type="text" value={pt} onChange={e=>setPt(e.target.value)}
+                onKeyDown={e=>e.key==="Enter"&&addPt()}
+                placeholder="add specific point… (Enter)" style={{...inkField(),flex:1}} />
+              <button onClick={addPt} disabled={!pt.trim()} style={{...thinBtn,opacity:pt.trim()?1:0.3,flexShrink:0}}>+</button>
+            </div>
+          </div>
+
+          {/* Attachments */}
+          <div>
+            <label style={LBL}>attachments</label>
+            {files.length>0 && (
+              <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:5}}>
+                {files.map(f=>(
+                  <span key={f.id} style={{fontSize:9,color:P.fade,fontFamily:FONT}}>
+                    {f.isImage?"🖼":"📎"} {f.name.length>14?f.name.slice(0,14)+"…":f.name}
+                    <span onClick={()=>setFiles(fs=>fs.filter(x=>x.id!==f.id))}
+                      style={{cursor:"pointer",color:SEV_COL.Critical+"88",marginLeft:3}}>×</span>
+                  </span>
+                ))}
+              </div>
+            )}
+            <input ref={fileRef} type="file" multiple style={{display:"none"}} onChange={e=>{readFiles(e.target.files);e.target.value="";}} />
+            <input ref={camRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>{readFiles(e.target.files);e.target.value="";}} />
+            <div style={{display:"flex",gap:14}}>
+              {[{icon:"📎",label:"attach file",ref:fileRef},{icon:"📷",label:"screenshot",ref:camRef}].map(b=>(
+                <button key={b.label} onClick={()=>b.ref.current?.click()}
+                  style={{background:"none",border:"none",padding:0,fontSize:10,color:P.fade,cursor:"pointer",fontFamily:FONT}}>
+                  {b.icon} {b.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </FormsArtifact>
       </NbScroll>
     </div>
   );
